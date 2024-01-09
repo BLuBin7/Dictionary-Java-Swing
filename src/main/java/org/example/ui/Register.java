@@ -135,5 +135,6 @@ public class Register extends JFrame {
             }
         });
         this.setVisible(true);
+
     }
 }

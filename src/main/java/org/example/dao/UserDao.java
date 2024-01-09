@@ -1,9 +1,13 @@
 package org.example.dao;
 
+import org.example.jpanel.DashBoard;
 import org.example.model.User;
+import org.example.ui.Login;
 import org.example.util.JDBCUtil;
 
+import javax.swing.*;
 import java.sql.*;
+import java.util.Locale;
 
 public class UserDao implements DAOinterface<User>{
     public static UserDao getInstance(){
@@ -45,5 +49,23 @@ public class UserDao implements DAOinterface<User>{
     @Override
     public User findbyID(int ID) {
         return null;
+    }
+
+    public boolean Login(String userName,String password){
+        String query = "SELECT username FROM Users WHERE username=? AND password=?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, userName);
+            preparedStatement.setString(2, password);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            if(rs.next()){
+                return true;
+            }else {
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

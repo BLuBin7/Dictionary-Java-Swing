@@ -125,6 +125,7 @@ public class Jp_Search extends JPanel {
         });
     }
 
+
     Connection connection = JDBCUtil.getConnection();
     public void findWord(JTextField inputWord,JLabel lblEnglish, JLabel lblVietNamese,
                          JLabel lblTag,JLabel lblPOS,JLabel pathAudioUS, JLabel pathAudioUK

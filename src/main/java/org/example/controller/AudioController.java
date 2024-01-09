@@ -9,6 +9,7 @@ import org.example.model.*;
 //import org.example.ui.DashBoard;
 import org.example.ui.DashBoard1;
 import org.example.ui.Home;
+import org.example.ui.Register;
 
 import javax.swing.*;
 import java.io.FileInputStream;

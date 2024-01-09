@@ -1,5 +1,7 @@
 package org.example.jpanel;
 
+import org.example.ui.Home;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -19,6 +21,15 @@ public class DashBoard extends JFrame {
                 }
             }
         });
+    }
+
+    private static DashBoard instance;
+
+    public static DashBoard getInstance() {
+        if (instance == null) {
+            instance = new DashBoard();
+        }
+        return instance;
     }
 
     public DashBoard() {

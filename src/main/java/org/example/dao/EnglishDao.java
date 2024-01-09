@@ -3,6 +3,8 @@ package org.example.dao;
 import org.example.model.AudioUK;
 import org.example.model.AudioUS;
 import org.example.model.English;
+import org.example.model.Enum.Brand;
+import org.example.model.Enum.Pos;
 import org.example.model.VietNamese;
 import org.example.util.JDBCUtil;
 
@@ -57,19 +59,48 @@ public class EnglishDao implements DAOinterface<English> {
         }
     }
 
-    public void findWord(JLabel jLabel){
-        String query = "SELECT * FROM English ";
-        try {
-            Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
-            ResultSet rs = statement.executeQuery(query);
-            while (rs.next()){
-                jLabel.setText(rs.getString(2));
-                System.out.println(rs.getString(2));
+    public void findWord(JTextField inputWord, JTextField lblEnglish, JTextField lblVietNamese,
+                         JComboBox<Pos> posComboBox, JComboBox<Brand> brandComboBox,
+                         JTextField pathAudioUS, JTextField pathAudioUK) {
+        String query = "SELECT e.name, vn.name, us.audio_source, " +
+                "uk.audio_source, tags.brand_tag_name, " +
+                "tags.Part_Of_Speech_tag_name " +
+                "FROM definition de " +
+                "JOIN english e ON de.english_id = e.id " +
+                "JOIN audio_us us ON e.audio_id_us = us.id " +
+                "JOIN audio_uk uk ON e.audio_id_uk = uk.id " +
+                "JOIN vietnamese vn ON vn.id = de.vietnamese_id " +
+                "JOIN tags tags ON tags.id = e.id " +
+                "WHERE e.name = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, inputWord.getText());
+
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+                lblEnglish.setText(rs.getString(1));
+                lblVietNamese.setText(rs.getString(2));
+                pathAudioUS.setText(rs.getString(3));
+                pathAudioUK.setText(rs.getString(4));
+                setComboBoxSelectedItem(brandComboBox, Brand.valueOf(rs.getString(5)));
+                setComboBoxSelectedItem(posComboBox, Pos.valueOf(rs.getString(6)));
+            } else {
+                JOptionPane.showMessageDialog(null, "Không tìm thấy từ: " + inputWord.getText(), "Thông báo", JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+    private <T> void setComboBoxSelectedItem(JComboBox<T> comboBox, T selectedItem) {
+        for (int i = 0; i < comboBox.getItemCount(); i++) {
+            if (comboBox.getItemAt(i).equals(selectedItem)) {
+                comboBox.setSelectedIndex(i);
+                break;
+            }
+        }
+    }
+
+
 
 
     @Override
@@ -90,5 +121,39 @@ public class EnglishDao implements DAOinterface<English> {
     @Override
     public English findbyID(int ID) {
         return null;
+    }
+    public void updateWord(int id,String inputWord, String VietNamese,
+                         JComboBox<Pos> posComboBox, JComboBox<Brand> brandComboBox,
+                           String  pathAudioUS, String pathAudioUK) {
+        String query = "UPDATE definition de " +
+                "JOIN english e ON de.english_id = e.id " +
+                "JOIN audio_us us ON e.audio_id_us = us.id " +
+                "JOIN audio_uk uk ON e.audio_id_uk = uk.id " +
+                "JOIN vietnamese vn ON vn.id = de.vietnamese_id " +
+                "JOIN tags tags ON tags.id = e.id " +
+                "SET vn.name = ?, e.name = ? ,us.audio_source = ?," +
+                "uk.audio_source= ?, tags.brand_tag_name=?, " +
+                "tags.Part_Of_Speech_tag_name = ?" +
+                "WHERE e.id = ?;";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, inputWord.getText());
+            preparedStatement.setString(2, VietNamese.getText());
+            preparedStatement.setString(3, pathAudioUS.getText());
+            preparedStatement.setString(4, pathAudioUK.getText());
+            preparedStatement.setString(5, posComboBox.getSelectedItem().toString());
+            preparedStatement.setString(6, brandComboBox.getSelectedItem().toString());
+            preparedStatement.setInt(7, id);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+//
+                JOptionPane.showMessageDialog(null, "Updated: " + inputWord.getText(), "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Không tìm thấy từ: " + inputWord.getText(), "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -18,6 +18,7 @@ public enum Pos {
     PREPOSITION,
     PRONOUN,
     VERB,
+    VERBS,
     ALL
 }
 

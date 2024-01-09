@@ -1,8 +1,14 @@
 package org.example.ui;
 
+import org.example.controller.RegisterController;
+import org.example.dao.UserDao;
+import org.example.jpanel.DashBoard;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Login extends JFrame {
 
@@ -24,6 +30,15 @@ public class Login extends JFrame {
                 }
             }
         });
+    }
+
+    private static Login instance;
+
+    public static Login getInstance() {
+        if (instance == null) {
+            instance = new Login();
+        }
+        return instance;
     }
 
     /**
@@ -73,5 +88,24 @@ public class Login extends JFrame {
         btnngK.setFont(new Font("Tahoma", Font.PLAIN, 16));
         btnngK.setBounds(34, 184, 109, 29);
         contentPane.add(btnngK);
+
+        btnNewButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Login();
+            }
+        });
+    }
+
+    public void Login(){
+        boolean bool = UserDao.getInstance().Login(textField.getText(),passwordField.getText());
+        if(bool){
+            JOptionPane.showMessageDialog(this ,"thấy từ: " + textField.getText(), "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            this.setVisible(false);
+            DashBoard.getInstance().setVisible(true);
+        }else {
+            JOptionPane.showMessageDialog(this,"Không tìm thấy từ: " + textField.getText(), "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+
+        }
     }
 }

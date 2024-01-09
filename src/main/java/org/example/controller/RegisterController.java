@@ -32,7 +32,6 @@ public class RegisterController {
         }else {
             JOptionPane.showMessageDialog(register , "Data inserted successfully!");
         }
-
     }
 
 
