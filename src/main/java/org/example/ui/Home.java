@@ -25,12 +25,6 @@ public class Home extends JFrame {
     private JTextField pathAudioUK;
     private AdvancedPlayer player;
 
-<<<<<<< HEAD
-=======
-    private JButton importButton;
-    //    private JButton playButton;
-//    private JTextField filePathField;
->>>>>>> 1ae8232 (update Component)
     private JButton btnPlayAudioUS;
     private JButton btnPlayAudioUK;
     private JButton btnImportAudioUK;

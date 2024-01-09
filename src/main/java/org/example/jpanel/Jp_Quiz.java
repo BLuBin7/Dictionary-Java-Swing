@@ -92,77 +92,149 @@ public class Jp_Quiz extends JPanel {
         return list;
     }
     List<Integer> list;
-
-    public void quizRandom(JLabel lblQuestion,JButton[] buttons){
+    public void quizRandom(JLabel lblQuestion, JButton[] buttons) {
         String query = "SELECT e.name, vn.name " +
                 "FROM definition de " +
                 "JOIN english e ON de.english_id = e.id " +
                 "JOIN vietnamese vn ON vn.id = de.vietnamese_id " +
                 "WHERE e.id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            int randomNumber= random.nextInt(2) + 9;
+            int randomNumber = random.nextInt(2) + 9;
             preparedStatement.setInt(1, 10);
 
-            int[] temp = {0,0,0};
-            int randoIndex= random.nextInt(4);
-            int i = 0;
-            int randomTemp;
-            if(randomNumber != 0){
-                do{
-                    randomTemp = random.nextInt(4);
-                    temp[i] = randomTemp;
-
-                }while (randomTemp != randoIndex);
-            }
+            int randomIndex = random.nextInt(4);
 
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 lblQuestion.setText(rs.getString(1));
-                buttons[randoIndex].setText(rs.getString(2));
+                buttons[randomIndex].setText(rs.getString(2));
             }
-            int tempRandom2 = random.nextInt(10);
-            preparedStatement.setInt(1, tempRandom2);
 
             list = random();
-            int a = list.indexOf(0);
-            int b = list.indexOf(1);
-            int c = list.indexOf(2);
-            int d = list.indexOf(3);
-//            ResultSet rs = preparedStatement.executeQuery();
-//            while (rs.next()) {
-//                lblQuestion.setText(rs.getString(1));
-//                buttons[a].setText(rs.getString(2));
-//            }
-            int ansB = -1 , ansC = -1;
-            ansB = quizRandom2(buttons,b,tempRandom2,ansB,ansC);
-            System.out.println(ansB);
-            ansC = quizRandom2(buttons,c,tempRandom2,ansB,ansC);
-            quizRandom2(buttons,d,tempRandom2,ansB,ansC);
+            int correctAnswerIndex = list.indexOf(0);
+
+            for (int i = 0; i < buttons.length; i++) {
+                int currentButtonIndex = list.indexOf(i);
+                if (currentButtonIndex == correctAnswerIndex) {
+                    int finalI = i;
+                    buttons[i].addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            // Xử lý khi nút được nhấn (ví dụ: thay đổi màu sắc)
+                            buttons[finalI].setBackground(Color.GREEN);
+                        }
+                    });
+                } else {
+                    int finalI = i;
+                    buttons[i].addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            buttons[finalI].setBackground(Color.RED);
+                        }
+                    });
+                }
+            }
+
+            // Gọi quizRandom2 cho các nút khác
+            int ansB = quizRandom2(buttons, randomIndex, correctAnswerIndex);
+            int ansC = quizRandom2(buttons, randomIndex, ansB);
+            quizRandom2(buttons, randomIndex, ansB);
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public int quizRandom2(JButton[] buttons,int index,int ans1,int ans2,int ans3){
+    public int quizRandom2(JButton[] buttons, int correctIndex, int previousIndex) {
         String query = "SELECT vn.name " +
                 "FROM vietnamese vn " +
-                "WHERE vn.id NOT IN (?, ?, ?) " +
+                "WHERE vn.id NOT IN (?, ?) " +
                 "ORDER BY RAND() " +
                 "LIMIT 1";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, ans1);
-            preparedStatement.setInt(2, ans2);
-            preparedStatement.setInt(3, ans3);
+            preparedStatement.setInt(1, correctIndex);
+            preparedStatement.setInt(2, previousIndex);
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
-                buttons[index].setText(rs.getString(1));
+                buttons[correctIndex].setText(rs.getString(1));
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return 1;
-
+        return correctIndex;
     }
+
+
+//    public void quizRandom(JLabel lblQuestion,JButton[] buttons){
+//        String query = "SELECT e.name, vn.name " +
+//                "FROM definition de " +
+//                "JOIN english e ON de.english_id = e.id " +
+//                "JOIN vietnamese vn ON vn.id = de.vietnamese_id " +
+//                "WHERE e.id = ?";
+//        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+//            int randomNumber= random.nextInt(2) + 9;
+//            preparedStatement.setInt(1, 10);
+//
+//            int[] temp = {0,0,0};
+//            int randomIndex= random.nextInt(4);
+//            int i = 0;
+//            int randomTemp;
+//            if(randomNumber != 0){
+//                do{
+//                    randomTemp = random.nextInt(4);
+//                    temp[i] = randomTemp;
+//
+//                }while (randomTemp != randomIndex);
+//            }
+//
+//            ResultSet rs = preparedStatement.executeQuery();
+//            while (rs.next()) {
+//                lblQuestion.setText(rs.getString(1));
+//                buttons[randomIndex].setText(rs.getString(2));
+//            }
+////            int tempRandom2 = random.nextInt(10);
+////            preparedStatement.setInt(1, tempRandom2);
+//
+//            list = random();
+//            int a = list.indexOf(0);
+//            int b = list.indexOf(1);
+//            int c = list.indexOf(2);
+//            int d = list.indexOf(3);
+////            ResultSet rs = preparedStatement.executeQuery();
+////            while (rs.next()) {
+////                lblQuestion.setText(rs.getString(1));
+////                buttons[a].setText(rs.getString(2));
+////            }
+//            int ansB = -1 , ansC = -1;
+//            ansB = quizRandom2(buttons,b,randomIndex,ansB,ansC);
+//            ansC = quizRandom2(buttons,c,randomIndex,ansB,ansC);
+//            quizRandom2(buttons,d,randomIndex,ansB,ansC);
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    public int quizRandom2(JButton[] buttons,int index,int ans1,int ans2,int ans3){
+//        String query = "SELECT vn.name " +
+//                "FROM vietnamese vn " +
+//                "WHERE vn.id NOT IN (?, ?, ?) " +
+//                "ORDER BY RAND() " +
+//                "LIMIT 1";
+//        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+//            preparedStatement.setInt(1, ans1);
+//            preparedStatement.setInt(2, ans2);
+//            preparedStatement.setInt(3, ans3);
+//            ResultSet rs = preparedStatement.executeQuery();
+//            while (rs.next()) {
+//                buttons[index].setText(rs.getString(1));
+//            }
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return 1;
+//
+//    }
 }

@@ -163,6 +163,8 @@ public class Jp_Search extends JPanel {
                 lblTag.setText(rs.getString(5));
                 lblPOS.setText(rs.getString(6));
 
+                btnAudioUS.setText("US");
+                btnAudioUK.setText("UK");
                 lblVietNamese.setVisible(true);
                 lblEnglish.setVisible(true);
                 lblTag.setVisible(true);
@@ -170,7 +172,6 @@ public class Jp_Search extends JPanel {
                 btnAudioUS.setVisible(true);
                 btnAudioUK.setVisible(true);
             } else {
-                // Không tìm thấy từ
                 JOptionPane.showMessageDialog(this, "Không tìm thấy từ: " + inputWord.getText(), "Thông báo", JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (SQLException e) {
