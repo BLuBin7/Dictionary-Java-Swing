@@ -1,4 +1,4 @@
-package org.example.jpanel;
+package org.example.swing.DashBoardForUser;
 
 import org.languagetool.JLanguageTool;
 import org.languagetool.Languages;
@@ -11,38 +11,58 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.List;
 
-public class Jp_CheckGramma extends JPanel {
-    private JFormattedTextField formattedTextField;
+public class JP_CheckGrammar extends JPanel {
+
+//    private JLanguageTool langTool;
 
     /**
      * Create the panel.
      */
-    public Jp_CheckGramma() {
+    private JTextArea textArea;
+    private JLabel formattedTextField;
+    public JP_CheckGrammar() {
         setLayout(null);
         JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setBounds(18, 10, 536, 99);
+        scrollPane.setBounds(28, 63, 556, 128);
         add(scrollPane);
 
-        JTextArea textArea = new JTextArea();
-        textArea.setFont(new Font("Monospaced", Font.PLAIN, 15));
+        textArea = new JTextArea();
+        textArea.setFont(new Font("Calibri", Font.PLAIN, 20));
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
         scrollPane.setViewportView(textArea);
 
 
-        JButton btnNewButton = new JButton("Check");
+        JButton btnNewButton = new JButton("CHECK");
 
-        JLabel formattedTextField = new JLabel();
-        formattedTextField.setBounds(18, 176, 536, 204);
-        add(formattedTextField);
+        formattedTextField = new JLabel();
+
+        formattedTextField.setFont(new Font("Calibri", Font.PLAIN, 20));
+
+        formattedTextField.setPreferredSize(new Dimension(556, 400));
+        formattedTextField.setVerticalAlignment(SwingConstants.TOP);
+        formattedTextField.setHorizontalAlignment(SwingConstants.LEFT);
+
+        btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 17));
+        btnNewButton.setBounds(483, 201, 101, 36);
+        add(btnNewButton);
+
+        JLabel lblNewLabel = new JLabel("CHECK GRAMMAR");
+        lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
+        lblNewLabel.setBounds(202, 20, 200, 27);
+        add(lblNewLabel);
+
+        JScrollPane scrollPane_1 = new JScrollPane();
+        scrollPane_1.setBounds(28, 247, 556, 199);
+        add(scrollPane_1);
+        scrollPane_1.setViewportView(formattedTextField);
         btnNewButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 check(textArea,formattedTextField);
             }
         });
-        btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
-        btnNewButton.setBounds(432, 134, 101, 21);
-        add(btnNewButton);
+        langTool = new JLanguageTool(Languages.getLanguageForShortCode("en-GB"));
     }
     JLanguageTool langTool = new JLanguageTool(Languages.getLanguageForShortCode("en-GB"));
     public void check(JTextArea textArea,JLabel jlabel) {
@@ -67,6 +87,10 @@ public class Jp_CheckGramma extends JPanel {
         }
         errorDetails.append("</html>");
         jlabel.setText(errorDetails.toString());
+    }
 
+    private void clearText() {
+        textArea.setText("");
+        formattedTextField.setText("");
     }
 }

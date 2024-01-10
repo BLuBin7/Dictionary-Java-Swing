@@ -1,11 +1,9 @@
-package org.example.jpanel.DashBoardForAdmin;
+package org.example.swing.DashBoardForAdmin;
 
-import com.mysql.cj.x.protobuf.Mysqlx;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.advanced.AdvancedPlayer;
 import javazoom.jl.player.advanced.PlaybackEvent;
 import javazoom.jl.player.advanced.PlaybackListener;
-import org.example.controller.TagController;
 import org.example.dao.EnglishDao;
 import org.example.dao.TagDao;
 import org.example.dao.VietNameseDao;
@@ -18,7 +16,7 @@ import org.example.model.VietNamese;
 import org.example.util.JDBCUtil;
 
 import javax.swing.*;
-import java.awt.Font;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileInputStream;
@@ -30,7 +28,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class InsertWord extends JPanel {
+public class JP_InsertWord extends JPanel {
     private JPanel contentPane;
     private JTextField inputWord;
     private JTextField inputDefinition;
@@ -48,100 +46,132 @@ public class InsertWord extends JPanel {
     private AudioUS audioUS;
     private AudioUK audioUK;
 
-    Pos[] optionsPOS = {Pos.INDEFINITE_ARTICLE, Pos.PREPOSITION, Pos.VERB
-            ,Pos.NOUN,Pos.ADJECTIVE,Pos.ADVERB};
+    Pos[] optionsPOS = {
+            Pos.ADJECTIVE,
+            Pos.ADVERB,
+            Pos.AUXILIARY_VERB,
+            Pos.CONJUNCTION,
+            Pos.DEFINITE_ARTICLE,
+            Pos.DETERMINER,
+            Pos.EXCLAMATION,
+            Pos.INDEFINITE_ARTICLE,
+            Pos.INFINITIVE_MARKER,
+            Pos.LINKING_VERB,
+            Pos.MODAL_VERB,
+            Pos.NOUN,
+            Pos.NUMBER,
+            Pos.ORDINAL_NUMBER,
+            Pos.PREPOSITION,
+            Pos.PRONOUN,
+            Pos.VERB,
+    };
 
     Brand[] optionsBrand = {Brand.A1, Brand.A2, Brand.B1,
             Brand.B2, Brand.C1, Brand.C2};
+    JComboBox<Brand> optionBrand = new JComboBox<>(optionsBrand);
+    JComboBox<Pos> optionPOS = new JComboBox<>(optionsPOS);
 	/**
 	 * Create the panel.
 	 */
-	public InsertWord() {
-        setBounds(100, 100, 601, 391);
+	public JP_InsertWord() {
+        setBounds(100, 100, 649, 413);
         setLayout(null);
-
+//        setBackground(Color.decode("#e6e200"));
         JLabel lblNewLabel = new JLabel("Nhập từ");
-        lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        lblNewLabel.setBounds(10, 46, 99, 14);
+        lblNewLabel.setFont(new Font("Calibri", Font.PLAIN, 19));
+        lblNewLabel.setBounds(10, 66, 99, 20);
         add(lblNewLabel);
 
         inputWord = new JTextField();
-        inputWord.setBounds(119, 47, 167, 20);
+        inputWord.setFont(new Font("Calibri", Font.PLAIN, 19));
+        inputWord.setBounds(119, 56, 280, 30);
         add(inputWord);
         inputWord.setColumns(10);
 
         JButton btnCreate = new JButton("Create");
-        btnCreate.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        btnCreate.setBounds(452, 307, 111, 35);
+        btnCreate.setFont(new Font("Calibri", Font.BOLD, 19));
+        btnCreate.setBounds(530, 355, 111, 35);
         add(btnCreate);
 
         JLabel lblNewLabel_1 = new JLabel("Nhập nghĩa");
-        lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        lblNewLabel_1.setBounds(10, 84, 120, 20);
+        lblNewLabel_1.setFont(new Font("Calibri", Font.PLAIN, 19));
+        lblNewLabel_1.setBounds(10, 110, 120, 20);
         add(lblNewLabel_1);
 
         inputDefinition = new JTextField();
-        inputDefinition.setBounds(119, 88, 167, 20);
+        inputDefinition.setFont(new Font("Calibri", Font.PLAIN, 19));
+        inputDefinition.setBounds(119, 104, 280, 30);
         add(inputDefinition);
         inputDefinition.setColumns(10);
 
         btnImportAudioUS = new JButton("Import MP3");
+        btnImportAudioUS.setFont(new Font("Calibri", Font.BOLD, 18));
 
-        btnImportAudioUS.setBounds(399, 131, 89, 23);
+        btnImportAudioUS.setBounds(407, 150, 142, 30);
         add(btnImportAudioUS);
 
         btnPlayAudioUS = new JButton("Play");
-        btnPlayAudioUS.setBounds(486, 131, 89, 23);
+        btnPlayAudioUS.setFont(new Font("Calibri", Font.BOLD, 19));
+        btnPlayAudioUS.setBounds(565, 150, 76, 30);
         add(btnPlayAudioUS);
 
         pathAudioUS = new JTextField();
-        pathAudioUS.setBounds(206, 133, 175, 20);
+        pathAudioUS.setFont(new Font("Calibri", Font.PLAIN, 19));
+        pathAudioUS.setBounds(206, 150, 193, 30);
         add(pathAudioUS);
         pathAudioUS.setColumns(10);
 
         JLabel lblNewLabel_1_1 = new JLabel("Thêm Phiên âm Anh Mỹ");
-        lblNewLabel_1_1.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        lblNewLabel_1_1.setBounds(8, 129, 201, 20);
+        lblNewLabel_1_1.setFont(new Font("Calibri", Font.PLAIN, 19));
+        lblNewLabel_1_1.setBounds(10, 158, 201, 20);
         add(lblNewLabel_1_1);
 
         JLabel lblNewLabel_1_3 = new JLabel("Nhập Thẻ Brand");
-        lblNewLabel_1_3.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        lblNewLabel_1_3.setBounds(10, 255, 142, 20);
+        lblNewLabel_1_3.setFont(new Font("Calibri", Font.PLAIN, 19));
+        lblNewLabel_1_3.setBounds(10, 281, 142, 20);
         add(lblNewLabel_1_3);
 
         JLabel lblNewLabel_1_1_1_1 = new JLabel("Thêm Phiên âm Anh Anh");
-        lblNewLabel_1_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        lblNewLabel_1_1_1_1.setBounds(10, 185, 225, 20);
+        lblNewLabel_1_1_1_1.setFont(new Font("Calibri", Font.PLAIN, 19));
+        lblNewLabel_1_1_1_1.setBounds(10, 211, 201, 20);
         add(lblNewLabel_1_1_1_1);
 
         pathAudioUK = new JTextField();
+        pathAudioUK.setFont(new Font("Calibri", Font.PLAIN, 19));
         pathAudioUK.setColumns(10);
-        pathAudioUK.setBounds(224, 185, 175, 20);
+        pathAudioUK.setBounds(206, 201, 193, 30);
         add(pathAudioUK);
 
         btnImportAudioUK = new JButton("Import MP3");
-        btnImportAudioUK.setBounds(410, 187, 89, 23);
+        btnImportAudioUK.setFont(new Font("Calibri", Font.BOLD, 18));
+        btnImportAudioUK.setBounds(407, 201, 142, 30);
         add(btnImportAudioUK);
 
         btnPlayAudioUK = new JButton("Play");
-        btnPlayAudioUK.setBounds(486, 187, 89, 23);
+        btnPlayAudioUK.setFont(new Font("Calibri", Font.BOLD, 19));
+        btnPlayAudioUK.setBounds(565, 206, 76, 30);
         add(btnPlayAudioUK);
 
-        JComboBox<Pos> optionPOS = new JComboBox<>(optionsPOS);
-        optionPOS.setBounds(162, 257, 142, 22);
+
+
+        optionPOS.setFont(new Font("Calibri", Font.PLAIN, 19));
+        optionPOS.setBounds(162, 270, 193, 35);
         add(optionPOS);
 
         JLabel lbloptionPOS = new JLabel("Nhập từ loại");
-        lbloptionPOS.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        lbloptionPOS.setBounds(10, 307, 142, 20);
+        lbloptionPOS.setFont(new Font("Calibri", Font.PLAIN, 19));
+        lbloptionPOS.setBounds(10, 333, 142, 20);
         add(lbloptionPOS);
 
-        Brand[] optionsBrand = {Brand.A1, Brand.A2, Brand.B1,
-                            Brand.B2, Brand.C1, Brand.C2};
 
-        JComboBox<Brand> optionBrand = new JComboBox<>(optionsBrand);
-        optionBrand.setBounds(164, 307, 122, 21);
+        optionBrand.setFont(new Font("Calibri", Font.PLAIN, 19));
+        optionBrand.setBounds(164, 327, 122, 27);
         add(optionBrand);
+
+        JLabel lblNewLabel_2 = new JLabel("Thêm từ ");
+        lblNewLabel_2.setFont(new Font("Calibri", Font.BOLD, 32));
+        lblNewLabel_2.setBounds(250, 10, 131, 36);
+        add(lblNewLabel_2);
 
         btnImportAudioUS.addActionListener(new ActionListener() {
             @Override
@@ -176,7 +206,8 @@ public class InsertWord extends JPanel {
         btnCreate.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                insertData(audioUS,audioUK,optionBrand.getSelectedItem(),optionPOS.getSelectedItem());
+//                TagController.getInstance().insertPOS(optionPOS.getSelectedItem());
+                insertData(audioUS,audioUK,optionBrand.getSelectedItem().toString(),optionPOS.getSelectedItem().toString());
                 inputWord.setText("");
                 inputDefinition.setText("");
                 pathAudioUS.setText("");
@@ -312,7 +343,8 @@ public void playAudioUS() {
         }
     }
 
-    public void insertData(AudioUS audioUS, AudioUK audioUK,Object Brand, Object POS) {
+
+    public void insertData(AudioUS audioUS, AudioUK audioUK,String Brand, String POS) {
         English english = new English();
         english.setName(inputWord.getText());
         english.setAudioUS_id(audioUS.getId());
@@ -323,8 +355,11 @@ public void playAudioUS() {
         try {
             int english_id = EnglishDao.getInstance().insertword(english,audioUS,audioUK);
             int vietnamese_id = VietNameseDao.getInstance().insert(VietNamese);
+
             EnglishDao.getInstance().insertDefinition(english_id ,vietnamese_id);
+
             TagDao.getInstance().insert(english_id,Brand, POS);
+
             JOptionPane.showMessageDialog(this , "Data inserted successfully!");
         } catch (Exception e) {
             e.printStackTrace();

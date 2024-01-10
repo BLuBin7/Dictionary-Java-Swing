@@ -13,7 +13,7 @@ public class VietNameseDao implements DAOinterface<VietNamese>{
     private Connection connection = JDBCUtil.getConnection();
     @Override
     public int insert(VietNamese vietNamese) {
-        String query = "INSERT INTO Vietnamese (name) VALUES (?)";
+        String query = "INSERT INTO Vietnamese (word) VALUES (?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, vietNamese.getWord());
 
@@ -43,5 +43,19 @@ public class VietNameseDao implements DAOinterface<VietNamese>{
     @Override
     public VietNamese findbyID(int ID) {
         return null;
+    }
+
+    public void deleteVietNamWord(int id){
+        try {
+            String query = " DELETE FROM vietnamese WHERE id = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, id);
+            int rs = preparedStatement.executeUpdate();
+//            while (rs.next()) {
+//                model.addRow(new Object[]{column1Value, column2Value, column3Value,column4Value});
+//            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

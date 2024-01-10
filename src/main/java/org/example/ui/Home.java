@@ -25,12 +25,10 @@ public class Home extends JFrame {
     private JTextField pathAudioUK;
     private AdvancedPlayer player;
 
-<<<<<<< HEAD
-=======
     private JButton importButton;
     //    private JButton playButton;
 //    private JTextField filePathField;
->>>>>>> 1ae8232 (update Component)
+
     private JButton btnPlayAudioUS;
     private JButton btnPlayAudioUK;
     private JButton btnImportAudioUK;
@@ -96,7 +94,17 @@ public class Home extends JFrame {
         }
         return instance;
     }
-
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    Home.getInstance();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
     private AudioUS audioUS;
     private AudioUK audioUK;
 
@@ -249,7 +257,7 @@ public class Home extends JFrame {
                 findWord(test);
                 System.out.println(optionPOS.getSelectedItem());
                 TagController.getInstance().insertPOS(optionPOS.getSelectedItem());
-                AudioController.getInstance().insertData(audioUS,audioUK,optionBrand.getSelectedItem(),optionPOS.getSelectedItem());
+                AudioController.getInstance().insertData(audioUS,audioUK,optionBrand.getSelectedItem().toString(),optionPOS.getSelectedItem().toString());
             }
         });
 

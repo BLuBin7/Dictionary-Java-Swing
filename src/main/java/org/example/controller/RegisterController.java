@@ -1,8 +1,6 @@
 package org.example.controller;
 
-import org.example.dao.UserDao;
-import org.example.model.User;
-import org.example.ui.Register;
+import org.example.swing.Register;
 
 import javax.swing.*;
 
@@ -21,18 +19,7 @@ public class RegisterController {
     private JTextField password = register.getPassword();
     private JTextField confirmPassword = register.getConfirmPassword();
 
-    public void Register() {
-        User user = new User();
-        user.setUserName(username.getText());
-        user.setEmail(email.getText());
-        if(password.getText().equals(confirmPassword.getText())){
-            user.setPassWord(password.getText());
-            UserDao.getInstance().insert(user);
-            JOptionPane.showMessageDialog(register , "Register successfully!");
-        }else {
-            JOptionPane.showMessageDialog(register , "Data inserted successfully!");
-        }
-    }
+
 
 
 }

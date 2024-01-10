@@ -7,18 +7,13 @@ import javazoom.jl.player.advanced.PlaybackListener;
 import org.example.dao.*;
 import org.example.model.*;
 //import org.example.ui.DashBoard;
-import org.example.ui.DashBoard1;
 import org.example.ui.Home;
-import org.example.ui.Register;
 
 import javax.swing.*;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Arrays;
 
 public class AudioController {
     Home dashBoard = Home.getInstance();
@@ -159,7 +154,7 @@ public class AudioController {
         }
     }
 
-    public void insertData(AudioUS audioUS, AudioUK audioUK,Object Brand, Object POS) {
+    public void insertData(AudioUS audioUS, AudioUK audioUK,String Brand, String POS) {
         English english = new English();
         english.setName(inputWord.getText());
         english.setAudioUS_id(audioUS.getId());

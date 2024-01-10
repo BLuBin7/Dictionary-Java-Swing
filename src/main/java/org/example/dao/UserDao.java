@@ -1,13 +1,9 @@
 package org.example.dao;
 
-import org.example.jpanel.DashBoard;
 import org.example.model.User;
-import org.example.ui.Login;
 import org.example.util.JDBCUtil;
 
-import javax.swing.*;
 import java.sql.*;
-import java.util.Locale;
 
 public class UserDao implements DAOinterface<User>{
     public static UserDao getInstance(){
@@ -68,4 +64,21 @@ public class UserDao implements DAOinterface<User>{
         }
         return false;
     }
+
+    public int getIdUser(String userName){
+        int id = 0;
+        String query = "SELECT id from users Where userName = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, userName);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                id = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println(id);
+        return id;
+    }
+
 }

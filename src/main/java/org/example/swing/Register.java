@@ -1,6 +1,8 @@
-package org.example.ui;
+package org.example.swing;
 
-import org.example.controller.RegisterController;
+import org.example.dao.UserDao;
+import org.example.model.User;
+import org.example.ui.Login;
 
 import javax.swing.*;
 import java.awt.*;
@@ -40,27 +42,11 @@ public class Register extends JFrame {
         return btnRegister;
     }
 
-    private static Register instance;
 
     public static Register getInstance() {
-        if (instance == null) {
-            instance = new Register();
-        }
-        return instance;
+        return new Register();
     }
 
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    Register frame = new Register();
-                    frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
 
     public Register() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -131,10 +117,32 @@ public class Register extends JFrame {
         btnRegister.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                RegisterController.getInstance().Register();
+                Register();
+            }
+        });
+        btnBack.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Back();
             }
         });
         this.setVisible(true);
 
+    }
+    public void Register() {
+        User user = new User();
+        user.setUserName(username.getText());
+        user.setEmail(email.getText());
+        if(password.getText().equals(confirmPassword.getText())){
+            user.setPassWord(password.getText());
+            UserDao.getInstance().insert(user);
+            JOptionPane.showMessageDialog(this , "Register successfully!");
+        }else {
+            JOptionPane.showMessageDialog(this , "Data inserted successfully!");
+        }
+    }
+    public void Back(){
+        this.setVisible(false);
+        Login.getInstance().setVisible(true);
     }
 }
